@@ -1,0 +1,12 @@
+#e-hentai的Cookie及客户端ID/Key，用于通知服务器端口变动
+access_info:
+  ipb_member_id: 
+  ipb_pass_hash: 
+  client_id: 
+  client_key: 
+proxy:
+  #是否使用代理与e-hentai.org通信
+  enable: True
+  #是否使用代理下载缓存
+  cache_download: False
+  url: http://127.0.0.1:8080
