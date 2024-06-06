@@ -33,7 +33,7 @@ class HathRustClient:
             content = f"{self.client_id}-{self.client_key}"
             f.write(content)
 
-    def start(self, enable_proxy, proxy_url, inner_port):
+    def start(self, force_background_scan, enable_proxy, proxy_url, inner_port):
         hath_rust_name = "hath-rust" if os.name == "posix" else "hath-rust.exe"
         cmd = [
             os.path.join(self.path, hath_rust_name),
@@ -52,6 +52,8 @@ class HathRustClient:
         ]
         if enable_proxy:
             cmd.extend(["--proxy", proxy_url])
+        if force_background_scan:
+            cmd.append("--force-background-scan")
         self.process = subprocess.Popen(cmd)
 
     def stop(self):
@@ -134,7 +136,7 @@ def main():
 
     path = os.path.dirname(os.path.realpath(__file__))
 
-    config = load_config(os.path.join(path, "hath-with-natter.yaml"))
+    config = load_config(os.path.join(path, "config.yaml"))
 
     hathrustclient = HathRustClient(
         config["access_info"]["client_id"],
@@ -155,7 +157,10 @@ def main():
         )
 
         hathrustclient.start(
-            config["proxy"]["cache_download"], config["proxy"]["url"], str(inner_port)
+            config["hath-rust"]["force_background_scan"],
+            config["proxy"]["cache_download"],
+            config["proxy"]["url"],
+            str(inner_port),
         )
 
         def signal_handler(signum, frame):

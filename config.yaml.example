@@ -10,3 +10,5 @@ proxy:
   #是否使用代理下载缓存
   cache_download: False
   url: http://127.0.0.1:8080
+hath-rust:
+  force_background_scan: False

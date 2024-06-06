@@ -3,14 +3,14 @@
 
 ## 使用方法
 ### 填写配置信息
-* 下载[hath-with-natter.yaml.example](https://github.com/taskmgr818/hath-with-natter/raw/main/hath-with-natter.yaml.example)
+* 下载[config.yaml.example](https://github.com/taskmgr818/hath-with-natter/raw/main/config.yaml.example)
 * 删除`.example`后缀
 * 填写配置信息
 ### 运行程序
 #### 使用 Docker 运行（仅Linux）
 执行
 ```text
-docker run --net=host -v /yourconfigpath.yaml:/hath/hath-with-natter.yaml -v /yourhathpath:/hath/hath --name hath-with-natter taskmgr818/hath-with-natter
+docker run --net=host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath/:/hath/hath/ --name hath-with-natter taskmgr818/hath-with-natter
 ```
 #### 使用 Python 运行
 * 安装依赖
