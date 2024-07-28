@@ -33,7 +33,9 @@ class HathRustClient:
             content = f"{self.client_id}-{self.client_key}"
             f.write(content)
 
-    def start(self, force_background_scan, enable_proxy, proxy_url, inner_port):
+    def start(
+        self, log_level, force_background_scan, enable_proxy, proxy_url, inner_port
+    ):
         hath_rust_name = "hath-rust" if os.name == "posix" else "hath-rust.exe"
         cmd = [
             os.path.join(self.path, hath_rust_name),
@@ -54,6 +56,8 @@ class HathRustClient:
             cmd.extend(["--proxy", proxy_url])
         if force_background_scan:
             cmd.append("--force-background-scan")
+        if log_level > 0:
+            cmd.append(f"-{'q' * log_level}")
         self.process = subprocess.Popen(cmd)
 
     def stop(self):
@@ -157,6 +161,7 @@ def main():
         )
 
         hathrustclient.start(
+            config["hath-rust"]["log_level"],
             config["hath-rust"]["force_background_scan"],
             config["proxy"]["cache_download"],
             config["proxy"]["url"],

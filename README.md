@@ -10,7 +10,7 @@
 #### 使用 Docker 运行（仅Linux）
 执行
 ```text
-docker run --net=host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath/:/hath/hath/ --name hath-with-natter taskmgr818/hath-with-natter
+docker run --net host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath/:/hath/hath/ --name hath-with-natter taskmgr818/hath-with-natter
 ```
 #### 使用 Python 运行
 * 安装依赖
