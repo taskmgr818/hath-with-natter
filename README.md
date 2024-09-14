@@ -18,7 +18,7 @@ docker run --net host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath
 * 运行`main.py`
 ## 注意事项
 * 需自行配置代理服务器，用于与e-hentai.org通信
-* 客户端需设为DMZ主机
+* 需启用Upnp或DMZ（二者不可同时开启）
 ## 参考项目
 * [MikeWang000000/Natter](https://github.com/MikeWang000000/Natter)
 * [james58899/hath-rust](https://github.com/james58899/hath-rust)

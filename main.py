@@ -149,7 +149,7 @@ def main():
     )
 
     while True:
-        inner_port, outer_ip, outer_port = natter()
+        inner_port, outer_ip, outer_port, upnp = natter()
 
         update_port(
             config["access_info"]["ipb_member_id"],
@@ -169,6 +169,7 @@ def main():
         )
 
         def signal_handler(signum, frame):
+            upnp.clear()
             hathrustclient.stop()
             sys.exit(0)
 
@@ -179,6 +180,7 @@ def main():
 
         logging.error("连接断开，即将重新启动")
         wait_for_network()
+        upnp.clear()
         hathrustclient.stop()
 
 
