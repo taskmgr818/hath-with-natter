@@ -72,13 +72,11 @@ def update_port(
     headers = {
         "Cookie": f"ipb_member_id={ipb_member_id}; ipb_pass_hash={ipb_pass_hash}"
     }
-    proxies = {}
-    if enable_proxy:
-        proxies["https://"] = proxy_url
+    proxy = proxy_url if enable_proxy else None
 
     while True:
         try:
-            html_content = httpx.get(url, headers=headers, proxies=proxies).text
+            html_content = httpx.get(url, headers=headers, proxy=proxy).text
         except Exception as e:
             logging.error(e)
             continue
@@ -100,7 +98,7 @@ def update_port(
 
     while True:
         try:
-            httpx.post(url, data=data, headers=headers, proxies=proxies)
+            httpx.post(url, data=data, headers=headers, proxy=proxy)
         except Exception as e:
             logging.error(e)
             continue
