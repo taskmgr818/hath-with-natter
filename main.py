@@ -34,7 +34,13 @@ class HathRustClient:
             f.write(content)
 
     def start(
-        self, log_level, force_background_scan, enable_proxy, proxy_url, inner_port
+        self,
+        log_level,
+        force_background_scan,
+        rpc_server_ip,
+        enable_proxy,
+        proxy_url,
+        inner_port,
     ):
         hath_rust_name = "hath-rust" if os.name == "posix" else "hath-rust.exe"
         cmd = [
@@ -58,6 +64,8 @@ class HathRustClient:
             cmd.append("--force-background-scan")
         if log_level > 0:
             cmd.append(f"-{'q' * log_level}")
+        if rpc_server_ip:
+            cmd.extend(["--rpc-server-ip", rpc_server_ip])
         self.process = subprocess.Popen(cmd)
 
     def stop(self):
@@ -69,14 +77,12 @@ def update_port(
     ipb_member_id, ipb_pass_hash, client_id, enable_proxy, proxy_url, outer_port
 ):
     url = f"https://e-hentai.org/hentaiathome.php?cid={client_id}&act=settings"
-    headers = {
-        "Cookie": f"ipb_member_id={ipb_member_id}; ipb_pass_hash={ipb_pass_hash}"
-    }
+    cookies = {"ipb_member_id": str(ipb_member_id), "ipb_pass_hash": ipb_pass_hash}
     proxy = proxy_url if enable_proxy else None
 
     while True:
         try:
-            html_content = httpx.get(url, headers=headers, proxy=proxy).text
+            html_content = httpx.get(url, cookies=cookies, proxy=proxy).text
         except Exception as e:
             logging.error(e)
             continue
@@ -98,7 +104,7 @@ def update_port(
 
     while True:
         try:
-            httpx.post(url, data=data, headers=headers, proxy=proxy)
+            httpx.post(url, data=data, cookies=cookies, proxy=proxy)
         except Exception as e:
             logging.error(e)
             continue
@@ -161,6 +167,7 @@ def main():
         hathrustclient.start(
             config["hath-rust"]["log_level"],
             config["hath-rust"]["force_background_scan"],
+            config["hath-rust"]["rpc_server_ip"],
             config["proxy"]["cache_download"],
             config["proxy"]["url"],
             str(inner_port),
