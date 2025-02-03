@@ -9,6 +9,7 @@ proxy:
   enable: True
   # 是否使用代理下载缓存
   cache_download: False
+  # 设置代理服务器的 URL，支持 http 和 socks5 协议
   url: http://127.0.0.1:8080
 hath-rust:
   force_background_scan: True

@@ -1,2 +1,2 @@
 pyyaml
-httpx
+httpx[socks]
