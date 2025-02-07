@@ -116,23 +116,19 @@ def keep_alive(outer_ip, outer_port):
     while retries < 3:
         time.sleep(15)
         try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((outer_ip, outer_port))
-            s.close()
-            retries = 0
+            with socket.create_connection((outer_ip, outer_port), timeout=3):
+                retries = 0
         except:
             retries += 1
 
 
 def wait_for_network():
-    test_url = "https://223.5.5.5"
     while True:
         try:
-            httpx.get(test_url)
+            with socket.create_connection(("223.5.5.5", 80), timeout=3):
+                break
         except:
             time.sleep(15)
-            continue
-        break
 
 
 def main():
@@ -154,6 +150,18 @@ def main():
 
     while True:
         inner_port, outer_ip, outer_port, upnp = natter()
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+                server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                server.bind(("0.0.0.0", inner_port))
+                server.listen(5)
+
+                with socket.create_connection((outer_ip, outer_port), timeout=3):
+                    pass
+        except:
+            logging.error("打洞失败，请检查NAT类型")
+            upnp.clear()
+            sys.exit(0)
 
         update_port(
             config["access_info"]["ipb_member_id"],
@@ -183,7 +191,7 @@ def main():
         time.sleep(60)
         keep_alive(outer_ip, outer_port)
 
-        logging.error("连接断开，即将重新启动")
+        logging.info("连接断开，即将重新启动")
         wait_for_network()
         upnp.clear()
         hathrustclient.stop()
