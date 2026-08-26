@@ -360,8 +360,9 @@ class UPnPDevice(object):
 
 
 class UPnPClient(object):
-    def __init__(self):
+    def __init__(self, server_ip=None):
         self.ssdp_addr = ("239.255.255.250", 1900)
+        self.server_ip = server_ip
         self.router = None
         self._sock_timeout = 1
         self._fwd_host = None
@@ -380,6 +381,10 @@ class UPnPClient(object):
         except (OSError, socket.error) as ex:
             logging.error("upnp: failed to discover router: %s" % ex)
         if not router_l:
+            if self.server_ip:
+                logging.warning(
+                    "upnp: specified server unavailable: %s" % self.server_ip
+                )
             self.router = None
         elif len(router_l) > 1:
             logging.warning("upnp: multiple routers found: %s" % (router_l,))
@@ -420,6 +425,8 @@ class UPnPClient(object):
         while True:
             try:
                 buff, addr = sock.recvfrom(4096)
+                if self.server_ip and addr[0] != self.server_ip:
+                    continue
                 m = re.search(r"LOCATION: *(http://[^\[]\S+)\s+", buff.decode("utf-8"))
                 if not m:
                     continue
@@ -536,7 +543,7 @@ def addr_to_uri(addr):
     return "tcp://%s:%d" % addr
 
 
-def natter():
+def natter(upnp_server_ip=None):
     sys.tracebacklimit = 0
 
     stun_list = [
@@ -581,7 +588,7 @@ def natter():
     # UPnP
     upnp_router = None
 
-    upnp = UPnPClient()
+    upnp = UPnPClient(upnp_server_ip)
     logging.info("Scanning UPnP Devices...")
     try:
         upnp_router = upnp.discover_router()

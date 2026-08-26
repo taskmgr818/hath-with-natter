@@ -149,7 +149,9 @@ def main():
     )
 
     while True:
-        inner_port, outer_ip, outer_port, upnp = natter()
+        inner_port, outer_ip, outer_port, upnp = natter(
+            (config.get("upnp") or {}).get("server_ip")
+        )
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
                 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

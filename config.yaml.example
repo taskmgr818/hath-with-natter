@@ -11,6 +11,9 @@ proxy:
   cache_download: False
   # 设置代理服务器的 URL，支持 http 和 socks5 协议
   url: http://127.0.0.1:8080
+upnp:
+  # 指定UPnP服务器IP（可选，留空则自动发现）
+  server_ip:
 hath-rust:
   force_background_scan: True
   # 日志等级 (0:Debug 1:Info 2:Warn 3:Error 4:Off)
