@@ -8,7 +8,11 @@
 * 填写配置信息
 ### 运行程序
 #### 使用 Docker 运行（仅Linux）
-执行
+使用 Docker Hub 镜像执行
+```text
+docker run --net host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath/:/hath/hath/ --name hath-with-natter taskmgr818/hath-with-natter:latest
+```
+或使用 GHCR 镜像执行
 ```text
 docker run --net host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath/:/hath/hath/ --name hath-with-natter ghcr.io/kagurazakairis/hath-with-natter:latest
 ```
