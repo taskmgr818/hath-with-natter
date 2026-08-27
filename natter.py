@@ -418,15 +418,14 @@ class UPnPClient(object):
             "\r\n" % self.ssdp_addr
         ).encode()
 
-        sock.sendto(dat01, self.ssdp_addr)
-        sock.sendto(dat02, self.ssdp_addr)
+        target = (self.server_ip, self.ssdp_addr[1]) if self.server_ip else self.ssdp_addr
+        sock.sendto(dat01, target)
+        sock.sendto(dat02, target)
 
         upnp_urls_d = {}
         while True:
             try:
                 buff, addr = sock.recvfrom(4096)
-                if self.server_ip and addr[0] != self.server_ip:
-                    continue
                 m = re.search(r"LOCATION: *(http://[^\[]\S+)\s+", buff.decode("utf-8"))
                 if not m:
                     continue

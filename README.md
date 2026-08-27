@@ -3,7 +3,7 @@
 
 ## 使用方法
 ### 填写配置信息
-* 下载[config.yaml.example](https://github.com/kagurazakairis/hath-with-natter/raw/main/config.yaml.example)
+* 下载[config.yaml.example](https://github.com/taskmgr818/hath-with-natter/raw/main/config.yaml.example)
 * 删除`.example`后缀
 * 填写配置信息
 ### 运行程序
@@ -14,7 +14,7 @@ docker run --net host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath
 ```
 或使用 GHCR 镜像执行
 ```text
-docker run --net host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath/:/hath/hath/ --name hath-with-natter ghcr.io/kagurazakairis/hath-with-natter:latest
+docker run --net host -v /yourconfigpath.yaml:/hath/config.yaml -v /yourhathpath/:/hath/hath/ --name hath-with-natter ghcr.io/taskmgr818/hath-with-natter:latest
 ```
 #### 使用 Python 运行
 * 安装依赖
