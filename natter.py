@@ -385,6 +385,8 @@ class UPnPClient(object):
                 logging.warning(
                     "upnp: specified server unavailable: %s" % self.server_ip
                 )
+            else:
+                logging.info("upnp: no router found")
             self.router = None
         elif len(router_l) > 1:
             logging.warning("upnp: multiple routers found: %s" % (router_l,))
@@ -418,14 +420,15 @@ class UPnPClient(object):
             "\r\n" % self.ssdp_addr
         ).encode()
 
-        target = (self.server_ip, self.ssdp_addr[1]) if self.server_ip else self.ssdp_addr
-        sock.sendto(dat01, target)
-        sock.sendto(dat02, target)
+        sock.sendto(dat01, self.ssdp_addr)
+        sock.sendto(dat02, self.ssdp_addr)
 
         upnp_urls_d = {}
         while True:
             try:
                 buff, addr = sock.recvfrom(4096)
+                if self.server_ip and addr[0] != self.server_ip:
+                    continue
                 m = re.search(r"LOCATION: *(http://[^\[]\S+)\s+", buff.decode("utf-8"))
                 if not m:
                     continue
